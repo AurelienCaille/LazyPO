@@ -1,0 +1,18 @@
+# LANGUAGE translation for Auto Po for the following files:
+# res://Test/new_script.gd
+# res://Test/test.tscn
+#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Auto Po\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: Test/new_script.gd
+#: Test/test.tscn
+msgid "I should be localized"
+msgstr ""
