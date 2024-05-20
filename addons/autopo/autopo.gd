@@ -14,7 +14,7 @@ var all_files_path : Array[String]
 
 func _enter_tree() -> void:
 	# Initialization of the plugin goes here.
-	add_tool_menu_item("Test PO", parse_all_dir)
+	add_tool_menu_item("Auto POT", parse_all_dir)
 
 
 func _exit_tree() -> void:
