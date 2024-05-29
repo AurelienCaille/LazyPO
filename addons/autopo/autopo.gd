@@ -126,6 +126,7 @@ func dir_contents_c(path : String, call_file : Callable, call_dir : Callable) ->
 #     base_value (String): The base value of the setting.
 func add_dir_setting(setting_name : String, base_value) -> void:
 	ProjectSettings.set_setting(setting_name, base_value)
+	ProjectSettings.set_initial_value(setting_name, base_value)
 	ProjectSettings.add_property_info({
 			"name": setting_name,
 			"type" : TYPE_STRING,
