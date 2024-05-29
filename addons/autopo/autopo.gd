@@ -5,16 +5,23 @@ const SETTING_POT := "internationalization/locale/translations_pot_files"
 const VALIDS_EXTENSION := ["tscn", "gd"]
 
 
-var dir_to_parse : Array[String] = ["res://"] #path of all dir to parse
-var dir_to_exclude : Array[String] = ["res://addons"] #dir and subdir we don't want to parse
+var dirs_to_parse : Array[String] = [] #path of all dir to parse
+const DIRS_TO_PARSE := "AutoPO/Dirs to parse/"
+const DIR_TO_PARSE := "Dir to parse"
+var dirs_to_exclude : Array[String] = [] #dir and subdir we don't want to parse
+const DIRS_TO_EXCLUDE := "AutoPO/Dirs to exclude/"
+const DIR_TO_EXCLUDE := "Dir to exclude"
 
 
 var all_files_path : Array[String]
 
 
 func _enter_tree() -> void:
-	# Initialization of the plugin goes here.
 	add_tool_menu_item("Auto POT", parse_all_dir)
+	_create_settings()
+	_get_settings()
+	print(dirs_to_parse)
+	print(dirs_to_exclude)
 
 
 func _exit_tree() -> void:
@@ -26,7 +33,7 @@ func parse_all_dir() -> void:
 	print("Start parsing")
 	all_files_path = []
 	
-	for dir_path : String in dir_to_parse:
+	for dir_path : String in dirs_to_parse:
 		sub_parse_all_dir(dir_path)
 	
 	save_to_settings(all_files_path)
@@ -34,7 +41,7 @@ func parse_all_dir() -> void:
 
 
 func sub_parse_all_dir(dir_path : String) -> void:
-	if not dir_path in dir_to_exclude:
+	if not dir_path in dirs_to_exclude:
 		dir_contents_c(dir_path, check_file_for_po, sub_parse_all_dir)
 
 
@@ -74,3 +81,45 @@ func dir_contents_c(path : String, call_file : Callable, call_dir : Callable) ->
 			file_name = dir.get_next()
 	else:
 		print("An error occurred when trying to access the path.")
+
+
+func add_dir_setting(setting_name : String, base_value) -> void:
+	ProjectSettings.set_setting(setting_name, base_value)
+	ProjectSettings.add_property_info({
+			"name": setting_name,
+			"type" : TYPE_STRING,
+			"hint": PROPERTY_HINT_DIR,
+			"usage": PROPERTY_USAGE_DEFAULT,
+		})
+	ProjectSettings.set_as_basic(setting_name, true)
+
+
+func _create_settings() -> void:
+	# We iterate to create multiples settings as Godot doesnt support Array of dir in ProjectSetting
+	for i in range(1, 17):
+		print(i)
+		var setting_to_parse_name : String = DIRS_TO_PARSE + DIR_TO_PARSE + " %s" % [i]
+		
+		if not ProjectSettings.has_setting(setting_to_parse_name):
+			add_dir_setting(setting_to_parse_name, "res://")
+		
+		
+		var setting_to_exclude_name : String = DIRS_TO_EXCLUDE + DIR_TO_EXCLUDE + " %s" % [i]
+		
+		if not ProjectSettings.has_setting(setting_to_exclude_name):
+			add_dir_setting(setting_to_exclude_name, "res://addons")
+
+	ProjectSettings.save()
+
+
+func _get_settings() -> void:
+	for i in range(1, 17):
+		var dir_to_parse = ProjectSettings.get_setting(DIRS_TO_PARSE + DIR_TO_PARSE + " %s" % [i])
+		
+		if not dir_to_parse in dirs_to_parse:
+			dirs_to_parse.append(dir_to_parse)
+			
+		var dir_to_exclude = ProjectSettings.get_setting(DIRS_TO_EXCLUDE + DIR_TO_EXCLUDE + " %s" % [i])
+		
+		if not dir_to_parse in dirs_to_parse:
+			dirs_to_parse.append(dir_to_parse)
