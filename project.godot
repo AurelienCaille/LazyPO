@@ -17,7 +17,3 @@ config/icon="res://icon.svg"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/autopo/plugin.cfg")
-
-[internationalization]
-
-locale/translations_pot_files=["res://Test/new_script.gd", "res://Test/test.tscn"]
